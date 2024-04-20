@@ -7,10 +7,13 @@ fn read_stdin() -> String {
 	buffer
 }
 
+const HELP: &str = "Usage: osmia [--ctx [json-object]] [--help]";
+
 fn main() {
 	let mut ctx: Option<String> = None;
 
 	let mut args = std::env::args();
+	args.next().unwrap();
 	while let Some(arg) = args.next() {
 		if arg == "--ctx" {
 			ctx = Some(args.next().unwrap_or_else(|| {
@@ -21,7 +24,12 @@ fn main() {
 			}));
 		}
 		else if arg == "--help" {
-			println!("Usage: osmia [--ctx [json-object]] [--help]");
+			println!("{}", HELP);
+			return;
+		}
+		else {
+			eprintln!("Invalid argument: {}", arg);
+			println!("{}", HELP);
 			return;
 		}
 	}
