@@ -7,7 +7,8 @@ fn read_stdin() -> String {
 	buffer
 }
 
-const HELP: &str = "Usage: osmia [--ctx [json-object]] [--help]";
+const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
+const HELP: &str = "Usage: osmia [--ctx [json-object]] [--help] [-v]";
 
 fn main() {
 	let mut ctx: Option<String> = None;
@@ -25,6 +26,14 @@ fn main() {
 		}
 		else if arg == "--help" {
 			println!("{}", HELP);
+			return;
+		}
+		else if arg == "-v" {
+			println!(
+				"osmia cli v{} using osmia v{}",
+				VERSION.unwrap_or("unknown"),
+				Osmia::VERSION
+			);
 			return;
 		}
 		else {
