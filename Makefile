@@ -19,6 +19,8 @@ DOCKER_RUN_IT = ${DOCKER_RUN} -it --name ${REPO}
 
 RUN_ATTRS = ${CODE_VOLUME} ${CARGO_REGISTRY} -w /${REPO}
 
+all: install
+
 terminal:
 	${DOCKER_RUN_IT} ${RUN_ATTRS} jkutkut/docker4rust
 
@@ -27,6 +29,9 @@ reset_file_permissions:
 
 build:
 	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust build
+
+build_release:
+	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust build --release
 
 run:
 	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust run
@@ -45,3 +50,6 @@ doc:
 
 clean:
 	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust clean
+
+install: build_release
+	cp target/release/${REPO} /usr/bin/osmia
