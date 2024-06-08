@@ -1,4 +1,4 @@
-pub const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub const HELP: &str =
 "--code          -- Add code as a JSON file                  
@@ -10,4 +10,4 @@ pub const HELP: &str =
 --help      -h  -- Display help information                 
 --version   -v  -- Display current version";
 
-
+pub const BIN_NAME: &str = env!("CARGO_BIN_NAME");

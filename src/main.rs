@@ -1,5 +1,9 @@
 use osmia::Osmia;
 
+#[cfg(test)]
+mod tests;
+#[cfg(test)]
+mod macros;
 mod utils;
 mod constants;
 
@@ -7,7 +11,7 @@ use utils::{
 	read_stdin, read_file,
 	// fail!
 };
-use constants::{VERSION, HELP};
+use constants::{VERSION, HELP, BIN_NAME};
 
 fn main() {
 	let mut ctx: Option<String> = None;
@@ -19,19 +23,22 @@ fn main() {
 		match arg.as_str() {
 			"-h" | "--help" => {
 				println!("{}", HELP);
+				return;
 			},
 			"-v" | "--version" => {
 				println!(
-					"osmia cli v{} using osmia v{}",
-					VERSION.unwrap_or("unknown"),
+					"{} v{} using osmia v{}",
+					BIN_NAME,
+					VERSION,
 					Osmia::VERSION
-				)
+				);
+				return;
 			},
 			"--ctx" => ctx = match args.next() {
 				None => fail!("Expected a json file after --ctx"),
 				Some(s) => match read_file(&s) {
 					Ok(s) => Some(s),
-					Err(err) => fail!("{}", err)
+					Err(err) => fail!("Error reading file {}: {}", s, err)
 				}
 			},
 			"--ctx-in" => ctx = match read_stdin() {
@@ -46,7 +53,7 @@ fn main() {
 				None => fail!("Expected an osmia file after --code"),
 				Some(s) => match read_file(&s) {
 					Ok(s) => Some(s),
-					Err(err) => fail!("{}", err)
+					Err(err) => fail!("Error reading file {}: {}", s, err)
 				}
 			},
 			"--code-in" => code = match read_stdin() {
@@ -81,5 +88,5 @@ fn main() {
 		Ok(result) => result,
 		Err(err) => fail!("{}", err)
 	};
-	println!("{}", result);
+	print!("{}", result);
 }

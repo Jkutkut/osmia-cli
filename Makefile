@@ -39,10 +39,10 @@ run:
 run_backtrace:
 	${DOCKER_RUN} ${RUN_ATTRS} -e RUST_BACKTRACE=1 --entrypoint cargo jkutkut/docker4rust run
 
-test:
+test: build
 	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust test
 
-test_backtrace:
+test_backtrace: build
 	${DOCKER_RUN} ${RUN_ATTRS} -e RUST_BACKTRACE=1 --entrypoint cargo jkutkut/docker4rust test
 
 doc:
