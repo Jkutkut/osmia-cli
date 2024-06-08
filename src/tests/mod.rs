@@ -6,6 +6,15 @@ use std::thread;
 use crate::macro_tests;
 use crate::constants::{VERSION, BIN_NAME, HELP};
 
+fn calc_bin_path(filename: &str) -> String {
+	if cfg!(debug_assertions) {
+		format!("target/debug/{}", filename)
+	}
+	else {
+		format!("target/release/{}", filename)
+	}
+}
+
 #[derive(Debug)]
 enum CmdArg<'a> {
 	Str(&'a str),
@@ -21,7 +30,7 @@ fn run_command(
 		CmdArg::Str(s) => s.split(' ').collect::<Vec<&str>>(),
 		CmdArg::Arr(a) => a
 	};
-	let bin_path = format!("target/debug/{}", BIN_NAME);
+	let bin_path = calc_bin_path(BIN_NAME);
 	let mut cmd = Command::new(bin_path);
 	if args.len() > 0 {
 		cmd.args(args);
@@ -111,7 +120,7 @@ macro_tests!(
 	(
 		arg_code_01,
 		CmdArg::Arr(vec![
-			"--ctx", "src/tests/data/data.json",
+			"--ctx-str", r#"{"program": "osmia-cli"}"#,
 			"--code", "src/tests/data/program.osmia"
 		]),
 		None,
