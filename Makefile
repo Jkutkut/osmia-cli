@@ -52,4 +52,4 @@ clean:
 	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust clean
 
 install: build_release
-	cp target/release/osmia /usr/bin/osmia
+	cp target/release/${REPO} /usr/bin/osmia
