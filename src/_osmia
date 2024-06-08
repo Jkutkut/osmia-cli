@@ -1,0 +1,27 @@
+#compdef _osmia osmia
+
+autoload -U compinit
+compinit
+
+_osmia() {
+    HELP_H_TAG='(-)-h[Display help information]'
+    HELP_TAG='(-)--help[Display help information]'
+    VERSION_ARG='(-)-v[Display current version]'
+    VERSION_V_ARG='(-)--version[Display current version]'
+
+    SINGLE_ARGS="-v --version -h --help"
+
+    CTX_TAG="(--ctx-str --ctx-in $SINGLE_ARGS)--ctx[Add context as a JSON file]:json-object:_files"
+    CTX_STR_TAG="(--ctx --ctx-in $SINGLE_ARGS)--ctx-str[Add context as a JSON string]:json-string:"
+    CTX_IN_TAG="(--ctx --ctx-str $SINGLE_ARGS)--ctx-in[Add context as a JSON string from stdin]"
+    CODE_TAG="(--code-str --code-in $SINGLE_ARGS)--code[Add code as a JSON file]:json-object:_files"
+    CODE_STR_TAG="(--code --code-in $SINGLE_ARGS)--code-str[Add code as a JSON string]:json-string:"
+    CODE_IN_TAG="(--code --code-str $SINGLE_ARGS)--code-in[Add code as a JSON string from stdin]"
+
+    _arguments \
+        $CTX_TAG $CTX_STR_TAG $CTX_IN_TAG \
+        $CODE_TAG $CODE_STR_TAG $CODE_IN_TAG \
+        $VERSION_ARG $VERSION_V_ARG \
+        $HELP_H_TAG $HELP_TAG
+}
+
