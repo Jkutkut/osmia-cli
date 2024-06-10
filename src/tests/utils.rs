@@ -74,3 +74,12 @@ pub fn test_valid_exact(args: CmdArg, stdin: Option<&str>, should_equal: &str) {
 	};
 	assert_eq!(r, should_equal);
 }
+
+pub fn test_invalid_contains(args: CmdArg, should_contain: &str) {
+	let r = match run_command(args, None) {
+		Err(err) => err,
+		Ok(r) => return fail(&format!("Command should fail but: {:?}", r))
+	};
+	println!("Error: {}, should contain: {}", r, should_contain);
+	assert!(r.contains(should_contain));
+}

@@ -4,7 +4,8 @@ mod models;
 use crate::macro_tests;
 use crate::constants::{VERSION, BIN_NAME, HELP};
 use utils::{
-	test_valid_contains, test_valid_exact
+	test_valid_contains, test_valid_exact,
+	test_invalid_contains
 };
 use models::{
 	CmdArg
@@ -72,5 +73,57 @@ macro_tests!(
 		]),
 		Some("osmia-cli {{ 1 + 2 }}\n"),
 		"osmia-cli 3\n"
+	),
+	(
+		empty_code,
+		CmdArg::Arr(vec![
+			"--code-in"
+		]),
+		None,
+		""
+	)
+);
+
+macro_tests!(
+	test_invalid_contains,
+	(
+		no_code_01,
+		CmdArg::Arr(vec![]),
+		"code"
+	),
+	(
+		no_code_02,
+		CmdArg::Arr(vec![
+			"--ctx", "src/tests/data/data.json",
+		]),
+		"code"
+	),
+	(
+		invalid_ctx_01,
+		CmdArg::Arr(vec![
+			"--ctx", "not-valid"
+		]),
+		"json"
+	),
+	(
+		invalid_ctx_02,
+		CmdArg::Arr(vec![
+			"--ctx-str", "not a json"
+		]),
+		"json"
+	),
+	(
+		invalid_ctx_03,
+		CmdArg::Arr(vec![
+			"--ctx-in"
+		]),
+		"json"
+	),
+	(
+		invalid_code_01,
+		CmdArg::Arr(vec![
+			"--code", "not a file"
+		]),
+		"osmia"
 	)
 );

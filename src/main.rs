@@ -38,7 +38,7 @@ fn main() {
 				None => fail!("Expected a json file after --ctx"),
 				Some(s) => match read_file(&s) {
 					Ok(s) => Some(s),
-					Err(err) => fail!("Error reading file {}: {}", s, err)
+					Err(err) => fail!("Error reading json file {}: {}", s, err)
 				}
 			},
 			"--ctx-in" => ctx = match read_stdin() {
@@ -53,7 +53,7 @@ fn main() {
 				None => fail!("Expected an osmia file after --code"),
 				Some(s) => match read_file(&s) {
 					Ok(s) => Some(s),
-					Err(err) => fail!("Error reading file {}: {}", s, err)
+					Err(err) => fail!("Error reading osmia file {}: {}", s, err)
 				}
 			},
 			"--code-in" => code = match read_stdin() {
@@ -71,7 +71,7 @@ fn main() {
 	let mut interpreter = match ctx {
 		Some(ctx) => match Osmia::from_json(&ctx) {
 			Ok(interpreter) => interpreter,
-			Err(err) => fail!("{}", err)
+			Err(err) => fail!("Invalid context json: {}", err)
 		},
 		None => Osmia::new()
 	};
@@ -82,7 +82,7 @@ fn main() {
 	};
 	let osmia_code = match Osmia::code(&code_str) {
 		Ok(code) => code,
-		Err(err) => fail!("{}", err)
+		Err(err) => fail!("Invalid osmia code: {}", err)
 	};
 	let result = match interpreter.run(&osmia_code) {
 		Ok(result) => result,
