@@ -62,3 +62,18 @@ install: build_release
 
 uninstall:
 	rm -f /usr/bin/osmia
+
+# Custom install
+include .env
+.env:
+	echo "BINARY_DIR=/usr/local/bin" > .env
+	echo "BINARY_NAME=osmia" >> .env
+	echo "AUTOCOMPLETE_DIR=/usr/local/share/zsh/site-functions" >> .env
+
+custom_install:
+	cp target/release/${REPO} ${BINARY_DIR}/${BINARY_NAME}
+	cp src/_osmia ${AUTOCOMPLETE_DIR}
+
+custom_uninstall:
+	rm -f ${BINARY_DIR}/${REPO}
+	rm -f ${AUTOCOMPLETE_DIR}/_osmia
