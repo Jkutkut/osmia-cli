@@ -59,3 +59,6 @@ clean:
 
 install: build_release
 	cp target/release/${REPO} /usr/bin/osmia
+
+uninstall:
+	rm -f /usr/bin/osmia
