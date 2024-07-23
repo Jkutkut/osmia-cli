@@ -27,6 +27,9 @@ terminal:
 reset_file_permissions:
 	sudo chown -R ${USER}:${USER} .
 
+update:
+	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust update
+
 build:
 	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust build
 
