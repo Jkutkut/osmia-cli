@@ -22,6 +22,14 @@ macro_tests!(
 macro_tests!(
 	test_valid_exact,
 	(
+		cli_version,
+		CmdArg::Arr(vec![
+			"--code-str", "{{ _OSMIA_CLI_VERSION }}"
+		]),
+		None,
+		VERSION
+	),
+	(
 		arg_ctx_01,
 		CmdArg::Arr(vec![
 			"--ctx", "src/tests/data/data.json",
@@ -108,14 +116,16 @@ macro_tests!(
 	(
 		invalid_ctx_02,
 		CmdArg::Arr(vec![
-			"--ctx-str", "not a json"
+			"--ctx-str", "not a json",
+			"--code-str", "{{ _OSMIA_VERSION }}"
 		]),
 		"json"
 	),
 	(
 		invalid_ctx_03,
 		CmdArg::Arr(vec![
-			"--ctx-in"
+			"--ctx-in",
+			"--code-str", "{{ _OSMIA_VERSION }}"
 		]),
 		"json"
 	),

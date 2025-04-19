@@ -1,4 +1,5 @@
 use osmia::Osmia;
+use osmia::CodeInterpreter;
 
 #[cfg(test)]
 mod tests;
@@ -68,25 +69,19 @@ fn main() {
 		}
 	}
 
-	let mut interpreter = match ctx {
-		Some(ctx) => match Osmia::from_json(&ctx) {
-			Ok(interpreter) => interpreter,
+	if let None = code {
+		fail!("No code provided");
+	}
+	let mut osmia = match ctx {
+		None => Osmia::default(),
+		Some(ctx) => match Osmia::try_from(ctx.as_str()) {
+			Ok(osmia) => osmia,
 			Err(err) => fail!("Invalid context json: {}", err)
-		},
-		None => Osmia::new()
+		}
 	};
-
-	let code_str = match code {
-		Some(code) => code,
-		None => fail!("No code provided")
-	};
-	let osmia_code = match Osmia::code(&code_str) {
-		Ok(code) => code,
-		Err(err) => fail!("Invalid osmia code: {}", err)
-	};
-	let result = match interpreter.run(&osmia_code) {
-		Ok(result) => result,
+	osmia.run_code(&format!("{{{{ _OSMIA_CLI_VERSION = \"{}\" }}}}", VERSION)).unwrap();
+	match osmia.run_code(&code.unwrap()) {
+		Ok(result) => print!("{}", result),
 		Err(err) => fail!("{}", err)
-	};
-	print!("{}", result);
+	}
 }
