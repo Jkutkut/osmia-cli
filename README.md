@@ -39,8 +39,15 @@ echo '{"usr": {"name": "Marvin"}}' | osmia --ctx-in --code-str "Hello {{usr.name
 Hello Marvin
 ```
 
+### Process API response:
+```bash
+curl https://pokeapi.co/api/v2/pokemon/pikachu | \
+    osmia --ctx-in --code-str \
+    'The moves of {{ name }} are: {{ moves?map(fn (f) => f.move.name)?join(", ") }}.'
+```
+
 ## Syntax:
-The syntax is the same as the [osmia](https://github.com/jkutkut/osmia) project. Your can have a look there or in their [documentation](https://jkutkut.github.io/osmia/osmia/struct.Osmia.html).
+This CLI uses the library [osmia](https://github.com/jkutkut/osmia) project. Your can have a look there or in their [documentation](https://jkutkut.github.io/osmia/osmia/struct.Osmia.html).
 
 ## Note:
 This README asumes that you've renamed the binary `osmia-cli` to `osmia` and it's available in your PATH variable.
