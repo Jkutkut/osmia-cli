@@ -4,13 +4,13 @@ It features a ZSH completion script and multiple arguments for code and context.
 
 ## Usage
 ```bash
---code          -- Add code as a JSON file                                               
---code-in       -- Add code as a JSON string from stdin                                  
---code-str      -- Add code as a JSON string                                             
---ctx           -- Add context as a JSON file                                            
---ctx-in        -- Add context as a JSON string from stdin                               
---ctx-str       -- Add context as a JSON string                                          
---help      -h  -- Display help information                                              
+--code          -- Add code as an osmia file
+--code-in       -- Add code as an osmia string from stdin
+--code-str      -- Add code as an osmia string
+--ctx           -- Add context as a JSON file
+--ctx-in        -- Add context as a JSON string from stdin
+--ctx-str       -- Add context as a JSON string
+--help      -h  -- Display help information
 --version   -v  -- Display current version
 ```
 
