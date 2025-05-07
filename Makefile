@@ -77,3 +77,14 @@ custom_install:
 custom_uninstall:
 	rm -f ${BINARY_DIR}/${REPO}
 	rm -f ${AUTOCOMPLETE_DIR}/_osmia
+
+# Git Hooks
+prepare_commit: hooks
+	${EDITOR} Cargo.toml
+	make test
+	git add Cargo.toml Cargo.lock; git add -N .;
+	git add -p
+
+hooks:
+	git config core.hooksPath .githooks
+	# git config --unset core.hooksPath
