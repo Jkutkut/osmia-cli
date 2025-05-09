@@ -1,10 +1,10 @@
+#[cfg(test)]
+use macro_test::macro_tests;
 use osmia::Osmia;
 use osmia::CodeInterpreter;
 
 #[cfg(test)]
 mod tests;
-#[cfg(test)]
-mod macros;
 mod utils;
 mod constants;
 

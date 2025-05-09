@@ -45,6 +45,9 @@ run_backtrace:
 test: build
 	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust test
 
+test_watch: build
+	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust watch --clear test
+
 test_release: build_release
 	${DOCKER_RUN} ${RUN_ATTRS} --entrypoint cargo jkutkut/docker4rust test --release
 

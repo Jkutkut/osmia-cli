@@ -1,9 +1,12 @@
 [package]
 name = "osmia-cli"
-version = "0.4.2"
+version = "0.4.3"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 osmia = { git = "https://github.com/jkutkut/osmia" }
+
+[dev-dependencies]
+macro_test = { git = "https://github.com/jkutkut/rust-macro-test" }
