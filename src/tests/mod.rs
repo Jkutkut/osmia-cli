@@ -39,9 +39,45 @@ macro_tests!(
 		"osmia-cli"
 	),
 	(
+		arg_ctx_02,
+		CmdArg::Arr(vec![
+			"--ctx-json", "src/tests/data/data.json",
+			"--code-str", "{{ program }}"
+		]),
+		None,
+		"osmia-cli"
+	),
+	(
+		arg_ctx_03,
+		CmdArg::Arr(vec![
+			"--ctx-yaml", "src/tests/data/data.yaml",
+			"--code-str", "{{ program }}"
+		]),
+		None,
+		"osmia-cli"
+	),
+	(
 		arg_ctx_str_01,
 		CmdArg::Arr(vec![
 			"--ctx-str", r#"{"program": "osmia-cli"}"#,
+			"--code-str", "{{ program }}"
+		]),
+		None,
+		"osmia-cli"
+	),
+	(
+		arg_ctx_str_02,
+		CmdArg::Arr(vec![
+			"--ctx-json-str", r#"{"program": "osmia-cli"}"#,
+			"--code-str", "{{ program }}"
+		]),
+		None,
+		"osmia-cli"
+	),
+	(
+		arg_ctx_str_03,
+		CmdArg::Arr(vec![
+			"--ctx-yaml-str", r#"program: osmia-cli"#,
 			"--code-str", "{{ program }}"
 		]),
 		None,
@@ -57,6 +93,24 @@ macro_tests!(
 		"osmia-cli"
 	),
 	(
+		arg_ctx_in_02,
+		CmdArg::Arr(vec![
+			"--ctx-json-in",
+			"--code-str", "{{ program }}"
+		]),
+		Some(r#"{"program": "osmia-cli"}"#),
+		"osmia-cli"
+	),
+	(
+		arg_ctx_in_03,
+		CmdArg::Arr(vec![
+			"--ctx-yaml-in",
+			"--code-str", "{{ program }}"
+		]),
+		Some(r#"program: osmia-cli"#),
+		"osmia-cli"
+	),
+	(
 		arg_code_01,
 		CmdArg::Arr(vec![
 			"--ctx-str", r#"{"program": "osmia-cli"}"#,
@@ -66,9 +120,45 @@ macro_tests!(
 		"osmia-cli\n"
 	),
 	(
+		arg_code_02,
+		CmdArg::Arr(vec![
+			"--ctx-json-str", r#"{"program": "osmia-cli"}"#,
+			"--code", "src/tests/data/program.osmia"
+		]),
+		None,
+		"osmia-cli\n"
+	),
+	(
+		arg_code_03,
+		CmdArg::Arr(vec![
+			"--ctx-yaml-str", r#"program: osmia-cli"#,
+			"--code", "src/tests/data/program.osmia"
+		]),
+		None,
+		"osmia-cli\n"
+	),
+	(
 		arg_code_str_01,
 		CmdArg::Arr(vec![
 			"--ctx-str", r#"{"program": "osmia-cli"}"#,
+			"--code-str", "{{ program }}"
+		]),
+		None,
+		"osmia-cli"
+	),
+	(
+		arg_code_str_02,
+		CmdArg::Arr(vec![
+			"--ctx-json-str", r#"{"program": "osmia-cli"}"#,
+			"--code-str", "{{ program }}"
+		]),
+		None,
+		"osmia-cli"
+	),
+	(
+		arg_code_str_03,
+		CmdArg::Arr(vec![
+			"--ctx-yaml-str", r#"program: osmia-cli"#,
 			"--code-str", "{{ program }}"
 		]),
 		None,
@@ -128,6 +218,52 @@ macro_tests!(
 			"--code-str", "{{ _OSMIA_VERSION }}"
 		]),
 		"json"
+	),
+	(
+		invalid_ctx_json_01,
+		CmdArg::Arr(vec![
+			"--ctx-json", "not-valid"
+		]),
+		"json"
+	),
+	(
+		invalid_ctx_json_02,
+		CmdArg::Arr(vec![
+			"--ctx-json-str", "not a json",
+			"--code-str", "{{ _OSMIA_VERSION }}"
+		]),
+		"json"
+	),
+	(
+		invalid_ctx_json_03,
+		CmdArg::Arr(vec![
+			"--ctx-json-in",
+			"--code-str", "{{ _OSMIA_VERSION }}"
+		]),
+		"json"
+	),
+	(
+		invalid_ctx_yaml_01,
+		CmdArg::Arr(vec![
+			"--ctx-yaml", "not-valid"
+		]),
+		"yaml"
+	),
+	(
+		invalid_ctx_yaml_02,
+		CmdArg::Arr(vec![
+			"--ctx-yaml-str", "not a yaml",
+			"--code-str", "{{ _OSMIA_VERSION }}"
+		]),
+		"yaml"
+	),
+	(
+		invalid_ctx_yaml_03,
+		CmdArg::Arr(vec![
+			"--ctx-yaml-in",
+			"--code-str", "{{ _OSMIA_VERSION }}"
+		]),
+		"yaml"
 	),
 	(
 		invalid_code_01,

@@ -14,8 +14,36 @@ use utils::{
 };
 use constants::{VERSION, HELP, BIN_NAME};
 
+enum CtxLang {
+	JSON,
+	YAML
+}
+
+impl std::fmt::Display for CtxLang {
+	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+		match self {
+			CtxLang::JSON => write!(f, "json"),
+			CtxLang::YAML => write!(f, "yaml")
+		}
+	}
+}
+
+struct CtxArg {
+	lang: CtxLang,
+	data: String
+}
+
+impl CtxArg {
+	fn new(lang: CtxLang, data: String) -> CtxArg {
+		CtxArg {
+			lang,
+			data
+		}
+	}
+}
+
 fn main() {
-	let mut ctx: Option<String> = None;
+	let mut ctx: Option<CtxArg> = None;
 	let mut code: Option<String> = None;
 
 	let mut args = std::env::args();
@@ -35,20 +63,35 @@ fn main() {
 				);
 				return;
 			},
-			"--ctx" => ctx = match args.next() {
-				None => fail!("Expected a json file after --ctx"),
+			"--ctx" | "--ctx-json" => ctx = match args.next() {
+				None => fail!("Expected a json file after --ctx-json"),
 				Some(s) => match read_file(&s) {
-					Ok(s) => Some(s),
+					Ok(s) => Some(CtxArg::new(CtxLang::JSON, s)),
 					Err(err) => fail!("Error reading json file {}: {}", s, err)
 				}
 			},
-			"--ctx-in" => ctx = match read_stdin() {
-				Ok(s) => Some(s),
+			"--ctx-in" | "--ctx-json-in" => ctx = match read_stdin() {
+				Ok(s) => Some(CtxArg::new(CtxLang::JSON, s)),
 				Err(err) => fail!("{}", err)
 			},
-			"--ctx-str" => ctx = match args.next() {
+			"--ctx-str" | "--ctx-json-str" => ctx = match args.next() {
 				None => fail!("Expected a json string after --ctx-str"),
-				s => s
+				Some(s) => Some(CtxArg::new(CtxLang::JSON, s)),
+			},
+			"--ctx-yaml" => ctx = match args.next() {
+				None => fail!("Expected a yaml file after --ctx-yaml"),
+				Some(s) => match read_file(&s) {
+					Ok(s) => Some(CtxArg::new(CtxLang::YAML, s)),
+					Err(err) => fail!("Error reading yaml file {}: {}", s, err)
+				}
+			},
+			"--ctx-yaml-in" => ctx = match read_stdin() {
+				Ok(s) => Some(CtxArg::new(CtxLang::YAML, s)),
+				Err(err) => fail!("{}", err)
+			},
+			"--ctx-yaml-str" => ctx = match args.next() {
+				None => fail!("Expected a yaml string after --ctx-str"),
+				Some(s) => Some(CtxArg::new(CtxLang::YAML, s)),
 			},
 			"--code" => code = match args.next() {
 				None => fail!("Expected an osmia file after --code"),
@@ -74,9 +117,15 @@ fn main() {
 	}
 	let mut osmia = match ctx {
 		None => Osmia::default(),
-		Some(ctx) => match Osmia::try_from(ctx.as_str()) {
-			Ok(osmia) => osmia,
-			Err(err) => fail!("Invalid context json: {}", err)
+		Some(ctx) => {
+			let osmia_result = match ctx.lang {
+				CtxLang::JSON => Osmia::try_from_json(&ctx.data),
+				CtxLang::YAML => Osmia::try_from_yaml(&ctx.data)
+			};
+			match osmia_result {
+				Ok(osmia) => osmia,
+				Err(err) => fail!("Invalid context {}: {}", ctx.lang.to_string(), err)
+			}
 		}
 	};
 	osmia.run_code(&format!("{{{{ _OSMIA_CLI_VERSION = \"{}\" }}}}", VERSION)).unwrap();
